@@ -4,25 +4,27 @@ import random
 import tkinter as tk
 import time
 #assets from https://www.reddit.com/r/Genshin_Impact/comments/oq2w62/i_made_a_venti_shimeji/
-x = 1400
+x = 2560
+y = 1600
 cycle = 0
 check = 1
 idle_num =[1,2,3,4]
 sleep_num = [10,11,12,13,15]
 walk_left = [6,7]
 walk_right = [8,9]
-event_number = random.randrange(1,3,1)
+flying_arr = [16,17]
+event_number = random.randrange(1,17,1)
 lastClickX = 0
 lastClickY = 0
 
-def SaveLastClickPos(event):
+def saveLastClickPos(event):
       global lastClickX, lastClickY
       lastClickX = event.x
       lastClickY = event.y
       
-def Dragging(event):
-      x, y = event.x - lastClickX + window.winfo_x(), event.y - lastClickY + window.winfo_y()
-      window.geometry("+%s+%s" % (x , y))
+def dragging(event):
+      a, b = event.x - lastClickX + window.winfo_x(), event.y - lastClickY + window.winfo_y()
+      window.geometry("+%s+%s" % (a , b))
 
 #impath = 'C:\\Users\\fx770\\Desktop\\Project\\Buddy\\image\\'
 #transfer random no. to event
@@ -51,6 +53,9 @@ def event(cycle,check,event_number,x):
   check = 3
   #print('from sleep to idle')
   window.after(100,update,cycle,check,event_number,x)#no. 15 = sleep to idle
+ elif event_number in flying_arr:
+  check = 6
+  window.after(100,update,cycle,check,event_number,x)
 #making gif work 
 
 def start_move(event, cycle, event_number):
@@ -78,6 +83,7 @@ def gif_work(cycle,frames,event_number,first_num,last_num):
 
 def update(cycle,check,event_number,x):
  #idle
+ global y
  if check ==0:
   frame = idle[cycle]
   cycle ,event_number = gif_work(cycle,idle,event_number,1,9)
@@ -99,12 +105,20 @@ def update(cycle,check,event_number,x):
   frame = walk_positive[cycle]
   cycle , event_number = gif_work(cycle,walk_positive,event_number,1,9)
   x -= 3
+  window.geometry('+'+str(x)+'+1050')#resolution
 #walk towards right
  elif check == 5:
   frame = walk_negative[cycle]
   cycle , event_number = gif_work(cycle,walk_negative,event_number,1,9)
   x -= -3
- #window.geometry('100x100+'+str(x)+'+1050')
+  window.geometry('+'+str(x)+'+1050')#resolution
+ elif check == 6:
+  frame = flying[cycle]
+  cycle,event_number = gif_work(cycle, flying, event_number, 1, 3)
+  y -= 3
+  
+ window.tk.call('wm', 'overrideredirect', window._w, True)
+ #window.geometry("+%s+%s" % (x, window.winfo_y()))
  label.configure(image=frame)
  window.after(1,event,cycle,check,event_number,x)
 
@@ -127,8 +141,8 @@ window.config(highlightbackground='black')
 
 
 window.wm_attributes('-topmost', True)
-window.bind('<Button-1>', SaveLastClickPos)
-window.bind('<B1-Motion>', Dragging)
+window.bind('<Button-1>', saveLastClickPos)
+window.bind('<B1-Motion>', dragging)
 
 #window.wm_attributes('-transparent',True)
 #window.wm_attributes('transparentcolor', 'black')
