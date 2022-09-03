@@ -90,29 +90,32 @@ def update(cycle,check,event_number):
   frame = sleep_to_idle[cycle]
   cycle ,event_number = gif_work(cycle,sleep_to_idle,event_number,1,1)
   x += 3
+  if x >= 800:
+      x = 20
+  window.geometry('+' + str(x)+'+' + str(y))
 #walk toward left
  elif check == 4:
   frame = walk_positive[cycle]
   cycle , event_number = gif_work(cycle,walk_positive,event_number,1,9)
   x += 3
-  #window.geometry(f"+{x}+{y}")
+  if x >= 800:
+      x = 20
+  window.geometry('+' + str(x)+'+' + str(y))
 #walk towards right
  elif check == 5:
   frame = walk_negative[cycle]
   cycle , event_number = gif_work(cycle,walk_negative,event_number,1,9)
   x -= 3
-  #window.geometry(f"+{x}+{y}")
+  if x <= 200:
+      x += 3
+  window.geometry('+' + str(x)+'+' + str(y))
  elif check == 6:
   frame = flying[cycle]
   cycle,event_number = gif_work(cycle, flying, event_number, 1, 9)
-  r = random.randint(0, 1)
-  if r == 0:
-      y -= 6
-  elif r == 1:
-      y += 6
-  #window.geometry(f"+{x}+{y}")
- #window.tk.call('wm', 'overrideredirect', window._w, True)
- window.geometry('+' + str(x)+'+' + str(y))
+  y -= 20
+  if y <= 200:
+     y = 635
+  window.geometry('+' + str(x)+'+' + str(y))
  label.config(image=frame)
  window.after(1,event,cycle,check,event_number)
 
@@ -120,7 +123,6 @@ def update(cycle,check,event_number):
 window = tk.Tk()
 window.tk.call('wm', 'overrideredirect', window._w, True)
 window.geometry("+{}+{}".format(x, y))
-#window.tk.call('wm', 'overrideredirect', window._w, True)
 #call buddy's action gif
 idle = [tk.PhotoImage(file='idle.gif',format = 'gif -index %i' %(i)) for i in range(3)]#idle gif
 idle_to_sleep = [tk.PhotoImage(file='idle_to_sleep.gif',format = 'gif -index %i' %(i)) for i in range(5)]#idle to sleep gif
@@ -131,9 +133,6 @@ walk_negative = [tk.PhotoImage(file='walking_negative.gif',format = 'gif -index 
 flying = [tk.PhotoImage(file='flying.gif',format = 'gif -index %i' %(i)) for i in range(1)]#walk to right gif
 hang = [tk.PhotoImage(file='hang.gif',format = 'gif -index %i' %(i)) for i in range(6)]#walk to right gif
 
-#window configuration
-#window.config(highlightbackground='black')
-#window.overrideredirect(True)
 
 window.wm_attributes('-topmost', 'true')
 window.wm_attributes('-topmost', 'true')
@@ -144,20 +143,12 @@ window.bind('<Button-1>', saveLastClickPos)
 window.bind('<B1-Motion>', dragging)
 
 
-#window.wm_attributes('-transparent',True)
-#window.wm_attributes('transparentcolor', 'black')
-
-#window.config(bg='systemTransparent')
-
-#window.geometry('100x100+'+str(x)+'+1050')
-#window.wm_attributes('-alpha',0.3)
 label = tk.Label(window)
 label.pack()
 
 #loop the program
 window.after(1,update,cycle,check,event_number)
-#window.tk.call('wm', 'overrideredirect', window._w, True)
 
 window.mainloop()
 #https://ezgif.com/maker
-#Draw venti walking, sleeping, throwing flowers, flying, turning into wisp
+#venti sometimes walks offscreen
