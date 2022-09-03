@@ -90,7 +90,7 @@ def update(cycle,check,event_number):
   frame = sleep_to_idle[cycle]
   cycle ,event_number = gif_work(cycle,sleep_to_idle,event_number,1,1)
   x += 3
-  if x >= 800:
+  if x >= 1200:
       x = 20
   window.geometry('+' + str(x)+'+' + str(y))
 #walk toward left
@@ -98,7 +98,7 @@ def update(cycle,check,event_number):
   frame = walk_positive[cycle]
   cycle , event_number = gif_work(cycle,walk_positive,event_number,1,9)
   x += 3
-  if x >= 800:
+  if x >= 1200:
       x = 20
   window.geometry('+' + str(x)+'+' + str(y))
 #walk towards right
@@ -106,8 +106,8 @@ def update(cycle,check,event_number):
   frame = walk_negative[cycle]
   cycle , event_number = gif_work(cycle,walk_negative,event_number,1,9)
   x -= 3
-  if x <= 200:
-      x += 3
+  if x <= 20:
+      x = 1200
   window.geometry('+' + str(x)+'+' + str(y))
  elif check == 6:
   frame = flying[cycle]
